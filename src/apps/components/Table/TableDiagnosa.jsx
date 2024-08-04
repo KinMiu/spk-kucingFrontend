@@ -88,14 +88,14 @@ const TableDiagnosa = ({ dataGejala }) => {
       console.log("input", data)
       
       const response = await ServiceDiagnosa.addDiagnosa(data)
+      console.log(response)
       if(response.result === "Unknown") {
         SweetAlertService.showError('Error', "Masukan Gejala lebih spesifik")
         setDataInput([])
-        return window.location.reload()
+        window.location.reload()
       }
       SweetAlertService.showSuccess('Success', response.message)
       setDataInput([])
-      // console.log(response)
       if(user.ROLE === "1") {
         navigate(`/admin/hasil-diagnosa/${response.result}`)
         window.location.reload()
