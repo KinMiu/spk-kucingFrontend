@@ -90,19 +90,20 @@ const TableDiagnosa = ({ dataGejala }) => {
       const response = await ServiceDiagnosa.addDiagnosa(data)
       console.log(response)
       if(response.result === "Unknown") {
-        SweetAlertService.showError('Error', "Masukan Gejala lebih spesifik")
-        // setDataInput([])
-        // window.location.reload()
+        SweetAlertService.confirmFailed()
+        setDataInput([])
+        setCurrentPage(0)
+        return navigate(`/diagnosa`)
       }
-      // SweetAlertService.showSuccess('Success', response.message)
-      // setDataInput([])
-      // if(user.ROLE === "1") {
-      //   navigate(`/admin/hasil-diagnosa/${response.result}`)
-      //   window.location.reload()
-      // } else {
-      //   navigate(`/hasil-diagnosa/${response.result}`)
-      //   window.location.reload()
-      // }
+      SweetAlertService.showSuccess('Success', response.message)
+      setDataInput([])
+      if(user.ROLE === "1") {
+        navigate(`/admin/hasil-diagnosa/${response.result}`)
+        window.location.reload()
+      } else {
+        navigate(`/hasil-diagnosa/${response.result}`)
+        window.location.reload()
+      }
     } catch (error) {
       SweetAlertService.showError('Error', error.message)
     }

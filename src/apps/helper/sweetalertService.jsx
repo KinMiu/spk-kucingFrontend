@@ -17,6 +17,16 @@ const SweetAlertService = {
     });
   },
 
+  confirmFailed: async () => {
+    return MySwal.fire({
+      title: 'Gagal Mendiagnosa',
+      text: 'Gagal melakukan dignosa, silahkan diagnosa kembali',
+      icon: 'warning',
+      confirmButtonColor: '#d33',
+      confirmButtonText: 'Ya!',
+    });
+  },
+
   confirmUpdateStatus: async () => {
     return MySwal.fire({
       title: 'Apa kamu yakin?',
