@@ -14,6 +14,11 @@ const SignUp = () => {
 
   const handleRegister = async () => {
     try {
+
+      if(password.length !== 8) {
+        SweetAlertService.showError('Error', "Password harus minimal 8 charakter")
+      }
+
       const data = {
         NAME: name,
         USERNAME: username,
