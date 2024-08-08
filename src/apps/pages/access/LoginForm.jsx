@@ -14,7 +14,7 @@ const LoginForm = () => {
   const handleLogin = async () => {
     try {
 
-      if(password.length !== 8) {
+      if(password.length < 8) {
         return SweetAlertService.showError('Error', "Password harus minimal 8 charakter")
       }
 
