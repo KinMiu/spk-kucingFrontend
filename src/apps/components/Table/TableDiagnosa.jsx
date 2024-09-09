@@ -10,7 +10,7 @@ const TableDiagnosa = ({ dataGejala }) => {
   const [user, setUser] = useState({})
   const [dataInput, setDataInput] = useState([])
   const [currentPage, setCurrentPage] = useState(0)
-  const itemsPerPage = 5
+  const itemsPerPage = 1
 
   const actionData = [
     {
@@ -25,6 +25,7 @@ const TableDiagnosa = ({ dataGejala }) => {
   ]
 
   const upsert = (prevData, newGejala) => {
+    console.log(newGejala)
     const existingGejalaIndex = prevData.findIndex(g => g.IDGEJALA === newGejala.IDGEJALA);
     if (existingGejalaIndex === -1) {
       // If Gejala does not exist, add it
@@ -37,16 +38,10 @@ const TableDiagnosa = ({ dataGejala }) => {
     }
   };
 
-  const handleCheckboxChange = (gejalaID, value, isChecked) => {
+  const handleButtonClick = (gejalaID, value) => {
     const newGejala = { IDGEJALA: gejalaID, VALUE: value };
-  
-    if (isChecked) {
-      // Add to dataInput if checked
-      setDataInput(prevData => upsert(prevData, newGejala));
-    } else {
-      // Remove from dataInput if unchecked
-      setDataInput(prevData => prevData.filter(item => !(item.IDGEJALA === gejalaID && item.VALUE === value)));
-    }
+    setDataInput(prevData => upsert(prevData, newGejala));
+    handleNext();
   };
 
   const handleInput = async () => {
@@ -124,14 +119,8 @@ const TableDiagnosa = ({ dataGejala }) => {
       setCurrentPage(prevPage => prevPage + 1);
     }
   };
-
-  const handlePrevious = () => {
-    if (startIndex > 0) {
-      setCurrentPage(prevPage => prevPage - 1);
-    }
-  };
   return (
-    <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+    <div className="rounded-md border h-auto border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
       <div className="m-4.5 w-100">
         <label className="mb-2.5 block text-black dark:text-white">
           Nama Kucing
@@ -140,22 +129,12 @@ const TableDiagnosa = ({ dataGejala }) => {
           type="text"
           value={namaKucing}
           onChange={(e) => setNamaKucing(e.target.value)}
-          placeholder="Masukan Nama Kucing Kamu"
-          className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+          placeholder="Masukan Nama Kucing"
+          className="w-fit rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
         />
       </div>
       <div>
-        <div className="grid grid-cols-4 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5">
-          <div className="col-span-1 flex items-center">
-            <p className="font-medium">No</p>
-          </div>
-          <div className="col-span-2 md:col-span-5 items-center sm:flex">
-            <p className="font-medium">Nama</p>
-          </div>
-          <div className="col-span-1 flex items-center">
-            <p className="font-medium">Pilih</p>
-          </div>
-        </div>
+      <p className="text-lg mx-4.5">Apakah kucing kamu mengalami gejala berikut ? </p>
 
         {
           currentSymptoms.map((gejala, index) => { 
@@ -165,26 +144,20 @@ const TableDiagnosa = ({ dataGejala }) => {
               .map(item => item.VALUE);
             // console.log(selectedValue)
           return (
-            <div key={gejala.IDGEJALA} className="grid grid-cols-4 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-8 md:px-6 2xl:px-7.5">
-              <div className="col-span-1 items-center sm:flex">
-                <p className="text-sm text-black dark:text-white">{startIndex+index+1}</p>
+            <div key={index} className="flex flex-col items-center gap-5 py-4.5 px-4 md:px-6 2xl:px-7.5 mt-5">
+              <div className="col-span-2 md:col-span-7  items-center sm:flex">
+                <p className="text-lg text-center text-black dark:text-white">{gejala.GEJALA}</p>
               </div>
-              <div className="col-span-2 md:col-span-5  items-center sm:flex">
-                <p className="text-sm text-black dark:text-white">{gejala.GEJALA}</p>
-              </div>
-              <div className="col-span-1 flex items-start md:items-center flex-col md:flex-row gap-3 ">
+              <div className="flex items-start md:items-center flex-row md:flex-row gap-3 ">
                 {
                   actionData.map((item) => (
-                    <label key={item.ID} className="flex items-center gap-2">
-                      <input
-                        type="checkbox"
-                        value={item.ID}
-                        checked={selectedValue.includes(item.ID)}
-                        onChange={(e) => handleCheckboxChange(gejala.IDGEJALA, item.ID, e.target.checked)}
-                        className="form-checkbox h-4 w-4 text-primary border-stroke dark:border-form-strokedark dark:bg-form-input"
-                      />
-                      <span className="text-sm text-black dark:text-white">{item.Value}</span>
-                    </label>
+                    <button
+                    key={item.ID}
+                    onClick={() => handleButtonClick(gejala.IDGEJALA, item.ID)}
+                    className={`${item.ID === 1 ? 'bg-blue-400 hover:bg-blue-600' : 'bg-red-400 hover:bg-red-600'}  rounded font-semibold text-white py-2 px-4 ${selectedValue.includes(item.ID) ? 'opacity-100' : 'opacity-50'}`}
+                  >
+                    {item.Value}
+                  </button>
                   ))
                 }
               </div>
@@ -192,26 +165,9 @@ const TableDiagnosa = ({ dataGejala }) => {
           )})
         }
       </div>
-      <div className="flex justify-between px-5 py-5">
-        <button
-          onClick={handlePrevious}
-          disabled={currentPage === 0}
-          className="bg-orange-400 rounded font-semibold text-white py-3 px-2"
-        >
-          Previous
-        </button>
-        <button
-          onClick={handleNext}
-          disabled={endIndex >= dataGejala.length}
-          className="bg-orange-400 rounded font-semibold text-white py-3 px-4"
-        >
-          Next
-        </button>
-      </div>
-      
       {
         endIndex >= dataGejala.length ?
-        <div className="float-start px-5 py-5">
+        <div className="float-end px-5 py-5">
           <button 
               onClick={handleInput}
               className="bg-orange-400 w-35 rounded font-semibold text-white py-3 px-2"

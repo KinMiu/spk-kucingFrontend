@@ -2,8 +2,8 @@ import axios from "axios";
 
 // Membuat instance axios
 export const api = axios.create({
-  baseURL: "https://spk-kucing-backend-fix.vercel.app/",
-  // baseURL: "http://localhost:3002/",
+  // baseURL: "https://spk-kucing-backend-fix.vercel.app/",
+  baseURL: "http://localhost:3002/",
   withCredentials: true // Memastikan cookies dikirim dalam setiap request
 });
 

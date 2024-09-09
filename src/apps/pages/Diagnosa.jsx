@@ -23,7 +23,7 @@ const Diagnosa = () => {
   }, [])
 
   return(
-    <div className="py-20 bg-blue-gray-800">
+    <div className="py-20 bg-blue-gray-800 w-full h-screen">
       <Navbar />
       <div className="flex flex-col gap-10 px-5 sm:px-12">
         <div className="bg-white px-5 py-5 rounded-md">
